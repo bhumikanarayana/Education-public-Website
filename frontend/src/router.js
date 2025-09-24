@@ -12,14 +12,14 @@ const routes = [
     component: () => import('@/pages/Aboutus.vue'),
   },
   {
-    path: '/courses',
-    name: 'Courses',
-    component: () => import('@/pages/Courses.vue'),
+    path: '/AcademicsCourses',
+    name: 'AcademicsCourses',
+    component: () => import('@/pages/AcademicsCourses.vue'),
   },
   {
-    path: '/result',
-    name: 'Results',
-    component: () => import('@/pages/Results.vue'),
+    path: '/Announcements',
+    name: 'Announcements',
+    component: () => import('@/pages/Announcements.vue'),
   },
   {
     path: '/contact',
