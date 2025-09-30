@@ -1,12 +1,12 @@
 <template>
-  <div class ="min-h-screen bg-gray-100 text-gray-800 font-sans ">
-    <Navbar />   <!-- Always visible -->
-    
-    <main>
-      <router-view />  <!-- Page changes here -->
+  <div class="min-h-screen bg-gray-100 text-gray-800 font-sans ">
+    <Navbar /> <!-- Always visible -->
+
+    <main class="pt-[150px]">
+      <router-view /> <!-- Page changes here -->
     </main>
-    
-    <Footer />   <!-- Always visible -->
+
+    <Footer /> <!-- Always visible -->
   </div>
 </template>
 
@@ -22,3 +22,10 @@ export default {
   }
 }
 </script>
+
+<style>
+/* Global styles can be added here if needed */
+* {
+  font-family: "Roboto", sans-serif;
+}
+</style>
