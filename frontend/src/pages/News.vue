@@ -8,18 +8,18 @@
 
         <!-- News Grid -->
         <div v-else class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <div v-for="(news) in newsList" :key="news.name"
+            <div v-for="news in newsList" :key="news.name"
                 class="bg-white shadow-md rounded-lg p-3 text-center cursor-pointer hover:shadow-lg transition"
                 @click="goToNewsDetails(news.name)">
                 <!-- Thumbnail -->
                 <img v-if="news.thumbnail_img" :src="news.thumbnail_img" alt="Thumbnail"
-                    class="mx-auto mb-4 object-contain" />
+                    class="mx-auto mb-4 object-contain" loading="lazy" />
 
                 <!-- News Title -->
                 <h2 class="font-semibold text-left text-lg mb-2">{{ news.description_heading_1 }}</h2>
 
                 <!-- Preview -->
-                <p class="text-left text-sm">{{ news.description_1.substring(0, 50) }}...</p>
+                <p class="text-left text-sm">{{ news.description_1 }}</p>
             </div>
         </div>
 
@@ -59,19 +59,17 @@ export default {
             try {
                 const res = await axios.get('/api/method/education_app.api.education_news.get_news')
 
-                // Simulate 1-second loading delay
-                setTimeout(() => {
-                    this.newsList = res.data.message.map(news => ({
-                        name: news.name,
-                        thumbnail_img: news.thumbnail_image,
-                        description_heading_1: news.description_heading_1,
-                        description_1: stripHtml(news.description_1).substring(0, 100)
-                    }))
-                    this.isLoading = false
-                }, 1000)
+                // Directly process the response without artificial delay
+                this.newsList = res.data.message.map(news => ({
+                    name: news.name,
+                    thumbnail_img: news.thumbnail_image,
+                    description_heading_1: news.description_heading_1 || "No Title",
+                    description_1: stripHtml(news.description_1 || "").substring(0, 100) + "..."
+                }))
 
             } catch (err) {
                 console.error('Error fetching news:', err)
+            } finally {
                 this.isLoading = false
             }
         }

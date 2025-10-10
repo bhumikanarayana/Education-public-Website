@@ -8,9 +8,14 @@
                     <span class="text-gray-600 text-lg animate-pulse">Loading Announcements...</span>
                 </div>
 
+                <!-- No Announcements -->
+                <div v-else-if="announcements.length === 0" class="py-6 text-gray-500">
+                    No announcements available at the moment.
+                </div>
+
                 <!-- Dynamic Announcements -->
-                <div v-else v-for="(announcement, index) in announcements" :key="index"
-                    class="font-semibold text-left text-lg mb-2 flex justify-between w-100">
+                <div v-else v-for="announcement in announcements" :key="announcement.name || announcement.id"
+                    class="font-semibold text-left text-lg mb-2 flex justify-between w-full">
                     <div>
                         <div class="mb-2">
                             {{ announcement.announcement_title }}
@@ -19,7 +24,7 @@
                             {{ announcement.announcement_contant }}
                         </div>
                     </div>
-                    <div class="text-gray-600 font-normal">
+                    <div class="text-gray-600 font-normal whitespace-nowrap">
                         {{ formatDate(announcement.announcement_created_date) }}
                     </div>
                 </div>
@@ -32,11 +37,18 @@
 <script>
 import axios from "axios";
 
+// Create formatter once (not inside method to avoid re-instantiating)
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+});
+
 export default {
     data() {
         return {
             announcements: [],
-            isLoading: true, // track loading state
+            isLoading: true,
         };
     },
     mounted() {
@@ -49,23 +61,17 @@ export default {
                 const res = await axios.get(
                     "/api/method/education_app.api.education_announcement.get_announcements"
                 );
-                // simulate 1 second loading
-                setTimeout(() => {
-                    this.announcements = res.data.message;
-                    this.isLoading = false;
-                }, 1000);
+                this.announcements = res.data.message || [];
             } catch (err) {
                 console.error("Error fetching announcements:", err);
+                this.announcements = [];
+            } finally {
                 this.isLoading = false;
             }
         },
         formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-            });
+            if (!dateStr) return "";
+            return dateFormatter.format(new Date(dateStr));
         },
     },
 };

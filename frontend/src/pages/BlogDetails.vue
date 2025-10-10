@@ -11,20 +11,26 @@
 
             <!-- Header Image -->
             <img v-if="blog.header_image" :src="blog.header_image" alt="Blog Image"
-                class="w-full h-96 object-cover rounded-lg mb-6" />
+                class="w-full h-96 object-cover rounded-lg mb-6" loading="lazy" />
 
             <!-- Description Headings & Content -->
-            <div v-for="n in 4" :key="n">
-                <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ blog[`description_heading_${n}`] }}</h2>
-                <p class="text-gray-700 text-lg leading-relaxed" v-html="blog[`description_${n}`]"></p>
+            <div v-for="(heading, index) in descriptionHeadings" :key="index">
+                <h2 v-if="heading" class="text-2xl font-bold text-gray-800 mb-3">
+                    {{ heading }}
+                </h2>
+                <p v-if="descriptions[index]" class="text-gray-700 text-lg leading-relaxed"
+                    v-html="descriptions[index]"></p>
             </div>
 
             <!-- Custom HTML -->
             <div v-if="blog.custom_html" v-html="blog.custom_html"></div>
+
         </div>
 
         <!-- Fallback if no blog found -->
-        <div v-else class="text-center text-gray-500">Exploring Blog</div>
+        <div v-else class="text-center text-gray-500 py-20">
+            Blog not found.
+        </div>
 
     </div>
 </template>
@@ -38,7 +44,9 @@ export default {
     data() {
         return {
             blog: null,
-            isLoading: true
+            isLoading: true,
+            descriptionHeadings: [],
+            descriptions: []
         }
     },
     setup() {
@@ -60,15 +68,26 @@ export default {
                 const res = await axios.get('/api/method/education_app.api.education_blog.get_blog', {
                     params: { blog_name: blogName }
                 })
+                this.blog = res.data.message || null
 
-                // Simulate 1 second loading delay
-                setTimeout(() => {
-                    this.blog = res.data.message
-                    this.isLoading = false
-                }, 1000)
+                if (this.blog) {
+                    // dynamically collect headings and descriptions
+                    this.descriptionHeadings = []
+                    this.descriptions = []
 
+                    for (let i = 1; i <= 4; i++) {
+                        const heading = this.blog[`description_heading_${i}`]
+                        const desc = this.blog[`description_${i}`]
+                        if (heading || desc) {
+                            this.descriptionHeadings.push(heading || '')
+                            this.descriptions.push(desc || '')
+                        }
+                    }
+                }
             } catch (err) {
                 console.error('Error fetching blog details:', err)
+                this.blog = null
+            } finally {
                 this.isLoading = false
             }
         }

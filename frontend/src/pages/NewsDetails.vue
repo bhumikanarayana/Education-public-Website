@@ -11,12 +11,14 @@
 
             <!-- Header Image -->
             <img v-if="news.header_image" :src="news.header_image" alt="News Image"
-                class="w-full h-96 object-cover rounded-lg mb-6" />
+                class="w-full h-96 object-cover rounded-lg mb-6" loading="lazy" />
 
             <!-- Description Headings & Content -->
-            <div v-for="n in 4" :key="n">
-                <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ news[`description_heading_${n}`] }}</h2>
-                <p class="text-gray-700 text-lg leading-relaxed" v-html="news[`description_${n}`]"></p>
+            <div v-for="n in 10" :key="n">
+                <template v-if="news[`description_heading_${n}`]">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ news[`description_heading_${n}`] }}</h2>
+                    <p class="text-gray-700 text-lg leading-relaxed" v-html="news[`description_${n}`]"></p>
+                </template>
             </div>
 
             <!-- Custom HTML -->
@@ -61,14 +63,17 @@ export default {
                     params: { news_name: newsName }
                 })
 
-                // Simulate 1-second loading delay
-                setTimeout(() => {
-                    this.news = res.data.message
-                    this.isLoading = false
-                }, 1000)
+                // Handle array or object
+                if (Array.isArray(res.data.message)) {
+                    this.news = res.data.message[0] || null
+                } else {
+                    this.news = res.data.message || null
+                }
 
             } catch (err) {
                 console.error('Error fetching news details:', err)
+                this.news = null
+            } finally {
                 this.isLoading = false
             }
         }
