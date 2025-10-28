@@ -22,6 +22,31 @@ const routes = [
     component: () => import('@/pages/Announcements.vue'),
   },
   {
+    path: '/AnnouncementList',
+    name: 'AnnouncementList',
+    component: () => import('@/pages/AnnouncementList.vue'),
+  },
+  {
+    path: '/Blogs',
+    name: 'Blogs',
+    component: () => import('@/pages/Blogs.vue'),
+  },
+  {
+    path: '/BlogDetails',
+    name: 'BlogDetails',
+    component: () => import('@/pages/BlogDetails.vue'),
+  },
+  {
+    path: '/News',
+    name: 'News',
+    component: () => import('@/pages/News.vue'),
+  },
+  {
+    path: '/NewsDetails',
+    name: 'NewsDetails',
+    component: () => import('@/pages/NewsDetails.vue'),
+  },
+  {
     path: '/contact',
     name: 'Contactus',
     component: () => import('@/pages/Contactus.vue'),
@@ -31,10 +56,15 @@ const routes = [
     name: 'Admission',
     component: () => import('@/pages/Admission.vue'),
   },
+  {
+    path: '/gallery',
+    name: 'Gallery',
+    component: () => import('@/pages/Gallery.vue'),
+  },
 ]
 
 let router = createRouter({
-  history: createWebHistory('/frontend'),
+  history: createWebHistory('/'),
   routes,
 })
 

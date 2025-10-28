@@ -1,19 +1,28 @@
 <template>
-  <div class ="min-h-screen bg-gray-100 text-gray-800 font-sans ">
-    <Navbar />   <!-- Always visible -->
-    
-    <main>
-      <router-view />  <!-- Page changes here -->
+  <div class="min-h-screen bg-gray-100 text-gray-800 font-sans">
+    <!-- Header -->
+    <header aria-label="Main Navigation">
+      <Navbar /> <!-- Always visible -->
+    </header>
+
+    <!-- Main content -->
+    <main class="pt-[150px]" aria-label="Page Content">
+      <router-view /> <!-- Page changes here -->
     </main>
-    
-    <Footer />   <!-- Always visible -->
+
+    <!-- Footer -->
+    <footer aria-label="Footer Section">
+      <Footer /> <!-- Always visible -->
+    </footer>
   </div>
 </template>
 
 <script>
-import Navbar from '@/pages/Navbar.vue'
-import Footer from '@/pages/Footer.vue'
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { defineAsyncComponent } from 'vue'
+
+// Lazy load Navbar & Footer for better performance
+const Navbar = defineAsyncComponent(() => import('@/pages/Navbar.vue'))
+const Footer = defineAsyncComponent(() => import('@/pages/Footer.vue'))
 
 export default {
   components: {
@@ -22,3 +31,11 @@ export default {
   }
 }
 </script>
+
+<style>
+/* Apply global font more efficiently */
+html,
+body {
+  font-family: "Roboto", sans-serif;
+}
+</style>

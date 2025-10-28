@@ -19,7 +19,8 @@ export default defineConfig({
   build: {
     outDir: `../${path.basename(path.resolve('..'))}/public/frontend`,
     emptyOutDir: true,
-    target: 'es2015',
+    // change build target so axios works
+    target: 'esnext',
   },
   optimizeDeps: {
     include: ['frappe-ui > feather-icons', 'showdown', 'engine.io-client'],

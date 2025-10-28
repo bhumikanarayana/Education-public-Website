@@ -10,6 +10,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.0.0",
     "@heroicons/vue": "^2.2.0",
+    "axios": "^0.27.2",
+    "bootstrap": "^5.3.8",
     "feather-icons": "^4.28.0",
     "frappe-ui": "^0.0.105",
     "vue": "^3.2.25",
